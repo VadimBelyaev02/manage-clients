@@ -7,28 +7,49 @@ servers:
   - url: /api/v1
     description: Generated server url
 
-#tags:
-#  - name: Clients
-
-
 paths:
   /clients:
     get:
+      summary: 'Get all clients'
+      description: 'Get a list of all clients stored in the system'
       operationId: getAllClients
       tags:
         - Clients
       responses:
         '200':
-          description: 'Client information is returned'
+          description: 'All clients are returned'
           content:
             application/json:
               schema:
-                type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientResponseDto'
+
+    post:
+      summary: 'Create a new client'
+      description: 'Create a new client using ClientRequestDto'
+      operationId: saveClient
+      tags:
+        - Clients
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequestDto'
+        required: true
+      responses:
+        '201':
+          description: 'Client has been created successfully'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponseDto'
+
 
   /clients/{clientId}:
     get:
-      summary: 'Get client'
-      description: 'Get a detail information a client'
+      summary: 'Get a single client'
+      description: 'Get a client by its id'
       operationId: getClient
       tags:
         - Clients
@@ -46,6 +67,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClientResponseDto'
+
+    put:
+      summary: 'Update a client'
+      description: 'Update an existing client by its id using ClientRequestDto'
+      operationId: updateClient
+      tags:
+        - Clients
+      parameters:
+        - in: path
+          name: clientId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          required: true
+          description: 'Client id'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequestDto'
+        required: true
+      responses:
+        '200':
+          description: 'Client has been updated successfully'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientResponseDto'
+
+    delete:
+      summary: 'Delete a client'
+      description: 'Delete an existing client by its id'
+      operationId: deleteClient
+      tags:
+        - Clients
+      parameters:
+        - in: path
+          name: clientId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          required: true
+          description: 'Client id'
+      responses:
+        '200':
+          description: 'Client has been deleted successfully'
+
 
 
 
