@@ -1,6 +1,5 @@
 package com.andersen.manageclients.service
 
-
 import org.openapitools.client.model.ClientRequestDto
 import org.openapitools.client.model.ClientResponseDto
 import java.util.*

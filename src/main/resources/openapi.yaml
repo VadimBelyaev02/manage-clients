@@ -5,12 +5,25 @@ info:
   version: 1.0.0
 servers:
   - url: /api/v1
+    description: Generated server url
 
-tags:
-  - name: Clients
+#tags:
+#  - name: Clients
 
 
 paths:
+  /clients:
+    get:
+      operationId: getAllClients
+      tags:
+        - Clients
+      responses:
+        '200':
+          description: 'Client information is returned'
+          content:
+            application/json:
+              schema:
+                type: string
 
   /clients/{clientId}:
     get:
@@ -32,7 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/ClientResponseDto'
 
 
 

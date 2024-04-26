@@ -4,8 +4,6 @@ import jakarta.persistence.*
 import lombok.Builder
 import java.util.*
 
-@Builder
-
 @Entity
 @Table(name = "clients")
 data class Client(

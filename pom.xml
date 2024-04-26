@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.andersen</groupId>
-    <artifactId>manage-clients</artifactId>
+    <artifactId>manageclients</artifactId>
     <version>0.0.1</version>
 
     <name>manage-clients</name>
@@ -44,10 +44,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-security</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -213,11 +213,12 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-test</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -341,6 +342,13 @@
                 </dependencies>
             </plugin>
 
+
+
+
+
+
+
+
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -390,14 +398,21 @@
                             <!-- target to generate java client code -->
 <!--                            <generatorName>kotlin</generatorName>-->
                             <generatorName>kotlin-spring</generatorName>
+                            <configOptions>
+                                <serializableModel>true</serializableModel>
+                                <interfaceOnly>false</interfaceOnly>
+                                <modelNameSuffix>Dto</modelNameSuffix>
+<!--                                <basePackage>nl.bjornvanderlaan.petstoreapi</basePackage>-->
+<!--                                <apiPackage>nl.bjornvanderlaan.petstoreapi.api</apiPackage>-->
+<!--                                <modelPackage>nl.bjornvanderlaan.petstoreapi.model</modelPackage>-->
+<!--                                <configPackage>nl.bjornvanderlaan.petstoreapi.config</configPackage>-->
 
+                            </configOptions>
                             <!-- hint: if you want to generate java server code, e.g. based on Spring Boot,
                                  you can use the following target: <generatorName>spring</generatorName> -->
 
                             <!-- pass any necessary config options -->
-                            <configOptions>
-                                <serializableModel>true</serializableModel>
-                            </configOptions>
+
 
 <!--                            <output>${project.build.directory}/generated-sources/kotlin</output>-->
                             <output>${project.basedir}/src/main/kotlin/com/andersen/manageclients/generated</output>
@@ -408,6 +423,58 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+
+
+
+
+
+
+<!--            <plugin>-->
+<!--                <groupId>org.openapitools</groupId>-->
+<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--                <version>${openapi-generator.version}</version>-->
+
+<!--                <configuration>-->
+<!--                    <generatorName>spring</generatorName>-->
+<!--                    <output>${project.basedir}/src/main/kotlin/com/andersen/manageclients/generated</output>-->
+<!--                    <generateModelTests>false</generateModelTests>-->
+<!--                    <generateApiTests>false</generateApiTests>-->
+
+<!--                    <apiPackage>api</apiPackage>-->
+<!--                    <modelPackage>dto</modelPackage>-->
+<!--                    <supportingFilesToGenerate>ApiUtil.java,HomeController.java,SpringDocConfiguration.java-->
+<!--                    </supportingFilesToGenerate>-->
+
+<!--                    <configOptions>-->
+<!--                        <library>spring-boot</library>-->
+<!--                        <java8>true</java8>-->
+<!--                        <delegatePattern>true</delegatePattern>-->
+<!--                        <hideGenerationTimestamp>true</hideGenerationTimestamp>-->
+<!--                        <useSpringBoot3>true</useSpringBoot3>-->
+<!--                        <configPackage>config</configPackage>-->
+<!--                        <useTags>false</useTags>-->
+<!--                    </configOptions>-->
+<!--                </configuration>-->
+
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>generate-default-with-template</id>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <inputSpec>src/main/resources/openapi.yaml</inputSpec>-->
+<!--                            <templateDirectory>src/main/resources/templates</templateDirectory>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+
+
         </plugins>
     </build>
 
