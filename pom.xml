@@ -153,11 +153,18 @@
             <version>${moshi-kotlin.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+<!--        <dependency>-->
+<!--            <groupId>javax.validation</groupId>-->
+<!--            <artifactId>validation-api</artifactId>-->
+<!--            <version>2.0.1.Final</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
         <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>2.0.1.Final</version>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
         </dependency>
+
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -224,13 +231,33 @@
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+<!--        <dependency>-->
+<!--            <groupId>javax.annotation</groupId>-->
+<!--            <artifactId>javax.annotation-api</artifactId>-->
+<!--            <version>1.3.2</version>-->
+<!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/jakarta.annotation/jakarta.annotation-api -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+
+        <!--        <dependency>-->
+<!--            <groupId>javax.servlet</groupId>-->
+<!--            <artifactId>servlet-api</artifactId>-->
+<!--            <version>2.5</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
+
 
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -395,23 +422,30 @@
 
                             </inputSpec>
 
-                            <!-- target to generate java client code -->
-<!--                            <generatorName>kotlin</generatorName>-->
+<!--                                <generatorName>kotlin</generatorName>&ndash;&gt;-->
                             <generatorName>kotlin-spring</generatorName>
                             <configOptions>
                                 <serializableModel>true</serializableModel>
                                 <interfaceOnly>false</interfaceOnly>
                                 <modelNameSuffix>Dto</modelNameSuffix>
-<!--                                <basePackage>nl.bjornvanderlaan.petstoreapi</basePackage>-->
+                                <basePackage>com.andersen.manageclients</basePackage>
+                                <apiPackage>com.andersen.manageclients.api</apiPackage>
+                                <modelPackage>com.andersen.manageclients.model</modelPackage>
+                                <configPackage>com.andersen.manageclients.config</configPackage>
+                                <library>spring-boot</library>
+                                <oas3>true</oas3>
+                                <useSpringController>true</useSpringController>
+                                <!-- javax.* to jakarta.* -->
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <useSpringfox>false</useSpringfox>
+                                <!--                                <basePackage>nl.bjornvanderlaan.petstoreapi</basePackage>-->
 <!--                                <apiPackage>nl.bjornvanderlaan.petstoreapi.api</apiPackage>-->
 <!--                                <modelPackage>nl.bjornvanderlaan.petstoreapi.model</modelPackage>-->
 <!--                                <configPackage>nl.bjornvanderlaan.petstoreapi.config</configPackage>-->
+                                <delegatePattern>true</delegatePattern>
 
                             </configOptions>
-                            <!-- hint: if you want to generate java server code, e.g. based on Spring Boot,
-                                 you can use the following target: <generatorName>spring</generatorName> -->
 
-                            <!-- pass any necessary config options -->
 
 
 <!--                            <output>${project.build.directory}/generated-sources/kotlin</output>-->
@@ -423,6 +457,17 @@
                     </execution>
                 </executions>
             </plugin>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

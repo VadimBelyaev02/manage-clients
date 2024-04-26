@@ -2,8 +2,8 @@ package com.andersen.manageclients.mapper.impl
 
 import com.andersen.manageclients.mapper.ClientMapper
 import com.andersen.manageclients.model.Client
-import org.openapitools.client.model.ClientRequestDto
-import org.openapitools.client.model.ClientResponseDto
+import com.andersen.manageclients.model.ClientRequestDto
+import com.andersen.manageclients.model.ClientResponseDto
 import org.springframework.stereotype.Component
 
 @Component

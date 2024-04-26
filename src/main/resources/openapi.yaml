@@ -8,7 +8,7 @@ servers:
     description: Generated server url
 
 paths:
-  /clients:
+   /clients:
     get:
       summary: 'Get all clients'
       description: 'Get a list of all clients stored in the system'
@@ -46,7 +46,7 @@ paths:
                 $ref: '#/components/schemas/ClientResponseDto'
 
 
-  /clients/{clientId}:
+   /clients/{clientId}:
     get:
       summary: 'Get a single client'
       description: 'Get a client by its id'
@@ -131,14 +131,18 @@ components:
     ClientRequestDto:
       type: object
       properties:
-        name:
-          type: string
         firstName:
           type: string
         lastName:
           type: string
         email:
           type: string
+          description: 'Email address'
+          example: 'examplemail@gmail.com'
+          pattern: '^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,}$'
+          x-pattern-message: 'Invalid email'
+          minLength: 7
+          maxLength: 50
       required:
         - lastName
         - firstName
@@ -163,4 +167,23 @@ components:
       pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
       example: 'c7b7c414-99be-11ee-b9d1-0242ac120002'
 
-
+    ApplicationExceptionResponseDto:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: 'Response status code'
+          example: '400'
+        message:
+          type: string
+          description: 'Code message'
+          example: 'Bad Request'
+        exceptionMessage:
+          type: string
+          description: 'Exception message'
+          example: 'Message'
+        timestamp:
+          type: string
+          format: date-time
+          description: 'Date and time'
+          example: '2020-01-01T00:00:00Z'

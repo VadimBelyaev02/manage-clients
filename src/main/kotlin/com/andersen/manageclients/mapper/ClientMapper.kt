@@ -1,10 +1,10 @@
 package com.andersen.manageclients.mapper
 
 import com.andersen.manageclients.model.Client
+import com.andersen.manageclients.model.ClientRequestDto
+import com.andersen.manageclients.model.ClientResponseDto
 import org.mapstruct.Mapping
 import org.mapstruct.MappingTarget
-import org.openapitools.client.model.ClientRequestDto
-import org.openapitools.client.model.ClientResponseDto
 
 //@Mapper
 interface ClientMapper {
