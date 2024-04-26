@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: Manage clients
+  description: :)
+  version: 1.0.0
+servers:
+  - url: /api/v1
+
+tags:
+  - name: Clients
+
+
+paths:
+
+  /clients/{clientId}:
+    get:
+      summary: 'Get client'
+      description: 'Get a detail information a client'
+      operationId: getClient
+      tags:
+        - Clients
+      parameters:
+        - in: path
+          name: clientId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          required: true
+          description: 'Client id'
+      responses:
+        '200':
+          description: 'Client information is returned'
+          content:
+            application/json:
+              schema:
+                type: string
+
+
+
+security:
+  - bearerAuth: [ ]
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      in: header
+      name: Authorization
+
+  schemas:
+    ClientRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+      required:
+        - lastName
+        - firstName
+        - email
+
+    ClientResponseDto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        lastName:
+          type: string
+        firstName:
+          type: string
+        email:
+          type: string
+
+
+    UUID:
+      type: string
+      description: 'Universal Unique Identifier'
+      pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+      example: 'c7b7c414-99be-11ee-b9d1-0242ac120002'
+
+

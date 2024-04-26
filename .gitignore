@@ -1,3 +1,7 @@
+.openapi-generator
+.mvn
+
+
 src/main/kotlin/com/andersen/manageclients/generated
 HELP.md
 target/
