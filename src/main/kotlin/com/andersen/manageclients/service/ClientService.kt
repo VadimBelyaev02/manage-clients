@@ -1,7 +1,7 @@
 package com.andersen.manageclients.service
 
-import org.openapitools.client.model.ClientRequestDto
-import org.openapitools.client.model.ClientResponseDto
+import com.andersen.manageclients.model.ClientRequestDto
+import com.andersen.manageclients.model.ClientResponseDto
 import java.util.*
 
 interface ClientService {
