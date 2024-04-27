@@ -21,7 +21,8 @@ class ClientMapperImpl : ClientMapper {
         return Client(
                 firstName = clientRequestDto.firstName,
                 lastName = clientRequestDto.lastName,
-                email = clientRequestDto.email
+                email = clientRequestDto.email,
+                gender = clientRequestDto.gender.value
         )
     }
 

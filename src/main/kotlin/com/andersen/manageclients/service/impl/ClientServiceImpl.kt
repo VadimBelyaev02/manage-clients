@@ -1,19 +1,23 @@
 package com.andersen.manageclients.service.impl
 
 import com.andersen.manageclients.exception.EntityDuplicationException
+import com.andersen.manageclients.exception.GenderProbabilityException
 import com.andersen.manageclients.mapper.ClientMapper
 import com.andersen.manageclients.model.ClientRequestDto
 import com.andersen.manageclients.model.ClientResponseDto
 import com.andersen.manageclients.repository.ClientRepository
 import com.andersen.manageclients.service.ClientService
+import com.andersen.manageclients.service.GenderizeService
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
 class ClientServiceImpl(
     private val clientRepository: ClientRepository,
-    private val clientMapper: ClientMapper
+    private val clientMapper: ClientMapper,
+    private val genderizeService: GenderizeService
 ) : ClientService {
 
     override fun getById(id: UUID): ClientResponseDto? {
@@ -28,14 +32,21 @@ class ClientServiceImpl(
         return clients.map { clientMapper.toResponseDto(it) }
     }
 
+    @Transactional
     override fun save(clientRequestDto: ClientRequestDto): ClientResponseDto {
         checkUniqueness(clientRequestDto)
+
+        val genderProbability = genderizeService.determineGenderProbability(clientRequestDto.firstName)
+        if (genderProbability != null && genderProbability < 0.8) {
+            throw GenderProbabilityException("Gender not detected")
+        }
 
         val client = clientMapper.toEntity(clientRequestDto)
         val savedClient = clientRepository.save(client)
         return clientMapper.toResponseDto(savedClient)
     }
 
+    @Transactional
     override fun update(id: UUID, clientRequestDto: ClientRequestDto): ClientResponseDto {
         checkUniqueness(clientRequestDto)
 
@@ -43,8 +54,7 @@ class ClientServiceImpl(
             EntityNotFoundException("Client with id = $id not found")
         }
         clientMapper.updateEntityFromRequestDto(clientRequestDto, client)
-        val updatedClient = clientRepository.save(client)
-        return clientMapper.toResponseDto(updatedClient)
+        return clientMapper.toResponseDto(client)
     }
 
     override fun deleteById(id: UUID) {
