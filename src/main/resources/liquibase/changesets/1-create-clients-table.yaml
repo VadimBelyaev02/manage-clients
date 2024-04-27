@@ -25,3 +25,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     unique: true
+  - changeSet:
+      id: add-gender-column
+      author: Vadzim
+      changes:
+        - addColumn:
+            tableName: clients
+            columns:
+              name: gender
+              type: varchar(6)

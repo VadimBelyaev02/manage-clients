@@ -133,20 +133,26 @@ components:
       properties:
         firstName:
           type: string
+          minLength: 2
+          maxLength: 50
         lastName:
           type: string
+          minLength: 2
+          maxLength: 50
         email:
           type: string
-          description: 'Email address'
           example: 'examplemail@gmail.com'
           pattern: '^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,}$'
           x-pattern-message: 'Invalid email'
           minLength: 7
           maxLength: 50
+        gender:
+          $ref: '#/components/schemas/Gender'
       required:
         - lastName
         - firstName
         - email
+        - gender
 
     ClientResponseDto:
       type: object
@@ -159,7 +165,16 @@ components:
           type: string
         email:
           type: string
+        gender:
+          $ref: '#/components/schemas/Gender'
 
+    Gender:
+      type: string
+      description: "Biological gender: 'Male' or 'Female' without quotes"
+      enum:
+        - Male
+        - Female
+      example: Active
 
     UUID:
       type: string

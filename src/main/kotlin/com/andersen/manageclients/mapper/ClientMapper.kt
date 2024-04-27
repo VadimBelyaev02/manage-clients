@@ -3,10 +3,11 @@ package com.andersen.manageclients.mapper
 import com.andersen.manageclients.model.Client
 import com.andersen.manageclients.model.ClientRequestDto
 import com.andersen.manageclients.model.ClientResponseDto
+import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import org.mapstruct.MappingTarget
 
-//@Mapper
+@Mapper
 interface ClientMapper {
 
 
