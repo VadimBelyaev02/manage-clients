@@ -1,0 +1,61 @@
+/**
+ * {{description}}{{^description}}{{classname}}{{/description}}{{#isDeprecated}}
+ * @deprecated{{/isDeprecated}}
+ */
+{{>additionalModelTypeAnnotations}}
+{{#description}}
+{{#isDeprecated}}
+@Deprecated
+{{/isDeprecated}}
+{{#swagger2AnnotationLibrary}}
+@Schema({{#name}}name = "{{name}}", {{/name}}description = "{{{description}}}"{{#deprecated}}, deprecated = true{{/deprecated}})
+{{/swagger2AnnotationLibrary}}
+{{/description}}
+{{#discriminator}}
+{{>typeInfoAnnotation}}
+{{/discriminator}}
+{{#jackson}}
+{{#isClassnameSanitized}}
+{{^hasDiscriminatorWithNonEmptyMapping}}
+@JsonTypeName("{{name}}")
+{{/hasDiscriminatorWithNonEmptyMapping}}
+{{/isClassnameSanitized}}
+{{/jackson}}
+{{>generatedAnnotation}}
+{{#vendorExtensions.x-class-extra-annotation}}
+{{{vendorExtensions.x-class-extra-annotation}}}
+{{/vendorExtensions.x-class-extra-annotation}}
+@Builder(toBuilder = true)
+public record {{classname}} (
+{{#vars}}
+		{{#isNullable}}
+		@Nullable()
+		{{/isNullable}}
+        {{#useBeanValidation}}
+        {{>beanValidation}}
+        {{/useBeanValidation}}
+        {{^useBeanValidation}}
+        {{#required}}@NotNull{{/required}}
+        {{/useBeanValidation}}
+        {{#deprecated}}
+        @Deprecated
+        {{/deprecated}}
+		{{#swagger2AnnotationLibrary}}
+		@Schema(name = "{{{baseName}}}"{{#isReadOnly}}, accessMode = Schema.AccessMode.READ_ONLY{{/isReadOnly}}{{#example}}, example = "{{{.}}}"{{/example}}{{#description}}, description = "{{{.}}}"{{/description}}{{#deprecated}}, deprecated = true{{/deprecated}}, requiredMode = {{#required}}Schema.RequiredMode.REQUIRED{{/required}}{{^required}}Schema.RequiredMode.NOT_REQUIRED{{/required}})
+		{{/swagger2AnnotationLibrary}}
+		{{#jackson}}
+		@JsonProperty("{{baseName}}")
+		{{/jackson}}
+		{{#isDate}}
+		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+		{{/isDate}}
+		{{#isDateTime}}
+		@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+		{{/isDateTime}}
+		{{#vendorExtensions.x-extra-annotation}}
+		{{{vendorExtensions.x-extra-annotation}}}
+		{{/vendorExtensions.x-extra-annotation}}
+		{{{datatypeWithEnum}}} {{name}}{{#-last}}{{/-last}}{{^-last}},{{/-last}}
+{{/vars}}
+) {
+}

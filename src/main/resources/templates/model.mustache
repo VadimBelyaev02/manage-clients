@@ -1,0 +1,49 @@
+package {{package}};
+
+import lombok.Builder;
+{{#imports}}import {{import}};
+{{/imports}}
+{{#openApiNullable}}
+import jakarta.annotation.Nullable;
+{{/openApiNullable}}
+{{#useBeanValidation}}
+import {{javaxPackage}}.validation.Valid;
+import {{javaxPackage}}.validation.constraints.*;
+{{/useBeanValidation}}
+{{^useBeanValidation}}
+import {{javaxPackage}}.validation.constraints.NotNull;
+{{/useBeanValidation}}
+{{#performBeanValidation}}
+import org.hibernate.validator.constraints.*;
+{{/performBeanValidation}}
+{{#jackson}}
+{{/jackson}}
+{{#swagger2AnnotationLibrary}}
+import io.swagger.v3.oas.annotations.media.Schema;
+{{/swagger2AnnotationLibrary}}
+
+{{^parent}}
+{{#hateoas}}
+import org.springframework.hateoas.RepresentationModel;
+{{/hateoas}}
+{{/parent}}
+
+import java.util.*;
+import {{javaxPackage}}.annotation.Generated;
+
+{{#models}}
+{{#model}}
+{{#additionalPropertiesType}}
+import java.util.Map;
+import java.util.HashMap;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+{{/additionalPropertiesType}}
+{{#isEnum}}
+{{>enumOuterClass}}
+{{/isEnum}}
+{{^isEnum}}
+{{#vendorExtensions.x-is-one-of-interface}}{{>oneof_interface}}{{/vendorExtensions.x-is-one-of-interface}}{{^vendorExtensions.x-is-one-of-interface}}{{>pojo}}{{/vendorExtensions.x-is-one-of-interface}}
+{{/isEnum}}
+{{/model}}
+{{/models}}
