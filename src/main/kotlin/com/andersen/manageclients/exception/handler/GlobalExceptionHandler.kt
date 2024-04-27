@@ -1,5 +1,7 @@
 package com.andersen.manageclients.exception.handler;
 
+import com.andersen.manageclients.exception.AccessDeniedException
+import com.andersen.manageclients.exception.AuthorizationException
 import com.andersen.manageclients.exception.EntityDuplicationException
 import com.andersen.manageclients.model.ApplicationExceptionResponseDto
 import jakarta.persistence.EntityNotFoundException
@@ -22,6 +24,28 @@ class GlobalExceptionHandler {
             statusCode = HttpStatus.BAD_REQUEST.value(),
             message = "Validation Exception",
             exceptionMessage = e.message,
+            timestamp = OffsetDateTime.now()
+        )
+    }
+
+    @ExceptionHandler(AuthorizationException::class)
+    fun handleApiExceptions(e: AuthorizationException, response: HttpServletResponse): ApplicationExceptionResponseDto {
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        return ApplicationExceptionResponseDto(
+            statusCode = HttpStatus.UNAUTHORIZED.value(),
+            message = "Access denied",
+            exceptionMessage = e.message ?: "",
+            timestamp = OffsetDateTime.now()
+        )
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleApiExceptions(e: AccessDeniedException, response: HttpServletResponse): ApplicationExceptionResponseDto {
+        response.status = HttpServletResponse.SC_FORBIDDEN
+        return ApplicationExceptionResponseDto(
+            statusCode = HttpStatus.FORBIDDEN.value(),
+            message = "Access denied",
+            exceptionMessage = e.message ?: "",
             timestamp = OffsetDateTime.now()
         )
     }

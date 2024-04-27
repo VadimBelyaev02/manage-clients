@@ -34,3 +34,13 @@ databaseChangeLog:
             columns:
               name: gender
               type: varchar(6)
+
+  - changeSet:
+      id: add-password-column
+      author: Vadzim
+      changes:
+        - addColumn:
+            tableName: clients
+            columns:
+              name: password
+              type: varchar(200)

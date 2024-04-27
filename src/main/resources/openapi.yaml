@@ -7,6 +7,11 @@ servers:
   - url: /api/v1
     description: Generated server url
 
+tags:
+  - name: Registration
+  - name: Authorization
+  - name: Clients
+
 paths:
    /clients:
     get:
@@ -112,8 +117,47 @@ paths:
         '200':
           description: 'Client has been deleted successfully'
 
+   /registration:
+     post:
+       summary: 'Create a new client'
+       description: 'Create a new client using RegistrationRequestDto'
+       operationId: registerClient
+       tags:
+         - Registration
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/RegistrationRequestDto'
+         required: true
+       responses:
+         '201':
+           description: 'Client is registered successfully'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ClientResponseDto'
 
-
+   /authorization/login:
+     post:
+       summary: 'Authorization'
+       description: 'Authorization using email and password'
+       operationId: authorizeClient
+       tags:
+         - Authorization
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/AuthorizationRequestDto'
+         required: true
+       responses:
+         '200':
+           description: 'Client is authorized successfully'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/AuthorizationResponseDto'
 
 security:
   - bearerAuth: [ ]
@@ -128,6 +172,38 @@ components:
       name: Authorization
 
   schemas:
+    RegistrationRequestDto:
+      type: object
+      properties:
+        password:
+          type: string
+          example: 'Example@11'
+      allOf:
+        - $ref: '#/components/schemas/ClientRequestDto'
+      required:
+        - password
+
+    AuthorizationRequestDto:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          type: string
+          example: 'Example@11'
+      required:
+        - email
+        - password
+
+    AuthorizationResponseDto:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        token:
+          type: string
+          description: "Jwt token used to access the system"
+
     ClientRequestDto:
       type: object
       properties:
@@ -135,24 +211,20 @@ components:
           type: string
           minLength: 2
           maxLength: 50
+          example: 'Vadzim'
         lastName:
           type: string
           minLength: 2
           maxLength: 50
+          example: 'Beliayeu'
         email:
-          type: string
-          example: 'examplemail@gmail.com'
-          pattern: '^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,}$'
-          x-pattern-message: 'Invalid email'
-          minLength: 7
-          maxLength: 50
+          $ref: '#/components/schemas/Email'
         gender:
           $ref: '#/components/schemas/Gender'
       required:
         - lastName
         - firstName
         - email
-        - gender
 
     ClientResponseDto:
       type: object
@@ -167,6 +239,12 @@ components:
           type: string
         gender:
           $ref: '#/components/schemas/Gender'
+      required:
+        - id
+        - lastName
+        - firstName
+        - email
+        - gender
 
     Gender:
       type: string
@@ -174,13 +252,21 @@ components:
       enum:
         - Male
         - Female
-      example: Active
+      example: Male
 
     UUID:
       type: string
       description: 'Universal Unique Identifier'
       pattern: '^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
       example: 'c7b7c414-99be-11ee-b9d1-0242ac120002'
+
+    Email:
+      type: string
+      example: 'examplemail@gmail.com'
+      pattern: '^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,}$'
+      x-pattern-message: 'Invalid email'
+      minLength: 7
+      maxLength: 50
 
     ApplicationExceptionResponseDto:
       type: object
