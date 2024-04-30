@@ -41,25 +41,25 @@ paths:
                schema:
                  $ref: '#/components/schemas/ClientPageResponseDto'
 
-    post:
-      summary: 'Create a new client'
-      description: 'Create a new client using ClientRequestDto'
-      operationId: saveClient
-      tags:
-        - Client
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ClientRequestDto'
-        required: true
-      responses:
-        '201':
-          description: 'Client has been created successfully'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ClientResponseDto'
+#    post:
+#      summary: 'Create a new client'
+#      description: 'Create a new client using ClientRequestDto'
+#      operationId: saveClient
+#      tags:
+#        - Client
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/ClientRequestDto'
+#        required: true
+#      responses:
+#        '201':
+#          description: 'Client has been created successfully'
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/ClientResponseDto'
 
 
    /clients/{clientId}:

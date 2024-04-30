@@ -33,10 +33,6 @@ class ClientApiDelegateImpl(
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
     }
 
-    override fun saveClient(clientRequestDto: ClientRequestDto): ResponseEntity<ClientResponseDto> {
-        return ResponseEntity.status(HttpStatus.CREATED).body(clientService.save(clientRequestDto));
-    }
-
     override fun updateClient(clientId: String, clientRequestDto: ClientRequestDto): ResponseEntity<ClientResponseDto> {
         return ResponseEntity.status(HttpStatus.OK)
             .body(clientService.update(UUID.fromString(clientId), clientRequestDto))

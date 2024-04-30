@@ -10,6 +10,7 @@ import com.andersen.manageclients.exception.EntityDuplicationException
 import com.andersen.manageclients.exception.GenderProbabilityException
 import com.andersen.manageclients.mapper.ClientMapper
 import com.andersen.manageclients.model.Client
+import com.andersen.manageclients.model.ClientPageResponseDto
 import com.andersen.manageclients.model.ClientRequestDto
 import com.andersen.manageclients.model.ClientResponseDto
 import com.andersen.manageclients.model.Gender
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.any
@@ -174,14 +176,14 @@ class ClientServiceImplTest : BaseUnitTest() {
                 pageNumber = pageNumber,
                 pageSize = pageSize
             )
-            val expectedListOfClients = clientList.stream()
+            val listOfClients = clientList.stream()
                 .filter { client ->
                     client.firstName.contains(firstNameCriteria) &&
                             client.lastName.contains(lastNameCriteria)
                 }
                 .skip(10)
                 .toList()
-            val expectedResult = expectedListOfClients.stream()
+            val listOfClientResponseDto = listOfClients.stream()
                 .map { client ->
                     ClientResponseDto(
                         firstName = client.firstName,
@@ -196,18 +198,22 @@ class ClientServiceImplTest : BaseUnitTest() {
             val pageable = PageRequest.of(pageableRequest.pageNumber, pageableRequest.pageSize)
             val spec = clientSpecification.firstNameAndEmailAndLastNameLike(firstNameCriteria, lastNameCriteria)
             val page: Page<Client> = PageImpl(
-                expectedListOfClients, pageable,
-                (expectedListOfClients.size / pageSize).toLong()
+                listOfClients, pageable,
+                (listOfClients.size / pageSize).toLong()
+            )
+            val expectedResult = ClientPageResponseDto(
+                pageNumber = pageableRequest.pageNumber,
+                elementsPerPage = pageableRequest.pageSize,
+                totalPages = page.totalPages,
+                totalElements = page.totalElements.toInt(),
+                content = listOfClientResponseDto
             )
 
-            `when`(clientSpecification.firstNameAndEmailAndLastNameLike(firstNameCriteria, lastNameCriteria)).thenReturn(spec)
-            `when`(clientRepository.findAll(spec, pageable)).thenReturn(page)
-//            `when`(clientMapper.toResponseDto(any())).thenReturn(clientResponseDto)
+            `when`(clientRepository.findAll(any(), eq(pageable))).thenReturn(page)
 
             assertEquals(expectedResult, clientService.getAll(pageableRequest, searchCriteria))
 
             verify(clientRepository, only()).findAll(spec, pageable)
-            //    verify(clientMapper, times(expectedListOfClients.size)).toResponseDto(any(Client::class.java))
         }
 
 
@@ -236,70 +242,6 @@ class ClientServiceImplTest : BaseUnitTest() {
 
             verify(clientRepository, only()).findAll()
             verifyNoInteractions(clientMapper)
-        }
-    }
-
-    @Nested
-    @DisplayName("Client save unit tests")
-    inner class SaveClientTests {
-
-        @Test
-        fun `save client should throw EntityDuplicationException when email exists`() {
-            `when`(clientRepository.existsByEmail(clientRequestDto.email)).thenReturn(true)
-
-            assertThrows<EntityDuplicationException> { clientService.save(clientRequestDto) }
-
-            verify(clientRepository, only()).existsByEmail(clientRequestDto.email)
-            verifyNoMoreInteractions(clientRepository, clientMapper)
-        }
-
-        @Test
-        fun `save client should returned saved client when clients is saved`() {
-            `when`(clientRepository.existsByEmail(clientRequestDto.email)).thenReturn(false)
-            `when`(genderizeService.determineGenderProbability(clientRequestDto.firstName)).thenReturn(genderizeResponse)
-            `when`(clientMapper.toEntity(clientRequestDto)).thenReturn(client)
-            `when`(clientRepository.save(client)).thenReturn(client)
-            `when`(clientMapper.toResponseDto(client)).thenReturn(clientResponseDto)
-
-            assertEquals(clientResponseDto, clientService.save(clientRequestDto))
-
-            verify(clientRepository, times(1)).existsByEmail(clientRequestDto.email)
-            verify(genderizeService, only()).determineGenderProbability(clientRequestDto.firstName)
-            verify(clientMapper, times(1)).toEntity(clientRequestDto)
-            verify(clientRepository, times(1)).save(client)
-            verify(clientMapper, times(1)).toResponseDto(client)
-        }
-
-        @ParameterizedTest
-        @ValueSource(doubles = [0.1, 0.2, 0.5, 0.7999999999999, 0.8, 0.8000000000001, 0.9, 1.0])
-        fun `save client with different name probabilities`(probability: Double) {
-            val genderizeResp = GenderizeResponse(
-                count = 1000,
-                name = FIRST_NAME,
-                gender = GENDER.name,
-                probability = probability
-            )
-
-            `when`(clientRepository.existsByEmail(clientRequestDto.email)).thenReturn(false)
-            `when`(genderizeService.determineGenderProbability(clientRequestDto.firstName)).thenReturn(genderizeResp)
-
-            if (probability < 0.8) {
-                assertThrows<GenderProbabilityException> { clientService.save(clientRequestDto) }
-            } else {
-                `when`(clientMapper.toEntity(clientRequestDto)).thenReturn(client)
-                `when`(clientRepository.save(client)).thenReturn(client)
-                `when`(clientMapper.toResponseDto(client)).thenReturn(clientResponseDto)
-
-                assertDoesNotThrow { clientService.save(clientRequestDto) }
-
-                verify(clientMapper, times(1)).toEntity(clientRequestDto)
-                verify(clientRepository, times(1)).save(client)
-                verify(clientMapper, times(1)).toResponseDto(client)
-            }
-
-            verify(clientRepository, times(1)).existsByEmail(clientRequestDto.email)
-            verify(genderizeService, only()).determineGenderProbability(clientRequestDto.firstName)
-            verifyNoMoreInteractions(clientRepository, genderizeService, clientMapper)
         }
     }
 

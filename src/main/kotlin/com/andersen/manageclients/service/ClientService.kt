@@ -14,8 +14,6 @@ interface ClientService {
 
     fun getAll(pageable: PageableRequest, searchCriteria: SearchCriteria): ClientPageResponseDto
 
-    fun save(clientRequestDto: ClientRequestDto): ClientResponseDto
-
     fun update(id: UUID, clientRequestDto: ClientRequestDto): ClientResponseDto
 
     @PreAuthorize("hasRole('ROLE_CLIENT')")

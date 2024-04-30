@@ -10,6 +10,10 @@ class ClientSpecification {
         val firstNameSpecification = firstNameLike(firstName)
         val lastNameSpecification = lastNameLike(lastName)
         //fix cases when "" (empty string)
+
+        if (firstNameSpecification != null) {
+            
+        }
         return Specification<Client> { root, query, criteriaBuilder ->
             criteriaBuilder.and(
                 firstNameSpecification.toPredicate(root, query, criteriaBuilder),
