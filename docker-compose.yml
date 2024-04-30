@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  manage_clients_backend:
+    container_name: manage-clients-backend
+    build:
+      dockerfile: Dockerfile
+    image: vadimbelyaev394875983474892/manage-clients:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - postgresql_network
+    environment:
+      JWT_SECRET: oirjreifgjergjerklfejlgkjg
+      JWT_EXPIRATION: 10000000
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - db_data:/var/lib/db
+    ports:
+      - "5433:5432"
+    restart: always
+    networks:
+      postgresql_network:
+
+networks:
+  postgresql_network:
+
+volumes:
+  db_data:
