@@ -49,23 +49,6 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-jpamodelgen -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.hibernate</groupId>-->
-        <!--            <artifactId>hibernate-jpamodelgen</artifactId>-->
-        <!--            <version>6.5.0.Final</version>-->
-        <!--            <type>pom</type>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin.kapt/org.jetbrains.kotlin.kapt.gradle.plugin -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.jetbrains.kotlin.kapt</groupId>-->
-        <!--            <artifactId>org.jetbrains.kotlin.kapt.gradle.plugin</artifactId>-->
-        <!--            <version>2.0.0-RC1</version>-->
-        <!--            <type>pom</type>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -79,7 +62,6 @@
             <artifactId>migbase64</artifactId>
             <version>${migbase64.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -313,12 +295,10 @@
 
                 </configuration>
                 <executions>
-                    <!-- Replacing default-compile as it is treated specially by maven -->
                     <execution>
                         <id>default-compile</id>
                         <phase>none</phase>
                     </execution>
-                    <!-- Replacing default-testCompile as it is treated specially by maven -->
                     <execution>
                         <id>default-testCompile</id>
                         <phase>none</phase>
@@ -330,13 +310,6 @@
                             <goal>compile</goal>
                         </goals>
                     </execution>
-                    <!--                    <execution>-->
-                    <!--                        <id>java-test-compile</id>-->
-                    <!--                        <phase>test-compile</phase>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>testCompile</goal>-->
-                    <!--                        </goals>-->
-                    <!--                    </execution>-->
                     <execution>
                         <id>kapt</id>
                         <goals>
@@ -371,36 +344,6 @@
                 </dependencies>
 
             </plugin>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -423,12 +366,10 @@
                     </compilerArgs>
                 </configuration>
                 <executions>
-                    <!-- Replacing default-compile as it is treated specially by maven -->
                     <execution>
                         <id>default-compile</id>
                         <phase>none</phase>
                     </execution>
-                    <!-- Replacing default-testCompile as it is treated specially by maven -->
                     <execution>
                         <id>default-testCompile</id>
                         <phase>none</phase>
@@ -465,54 +406,12 @@
             </plugin>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
 
                 <version>${openapi-generator.version}</version>
-
                 <executions>
-                    <!--                    <execution>-->
-                    <!--                        <id>default</id>-->
-                    <!--                        <goals>-->
-                    <!--                            <goal>generate</goal>-->
-                    <!--                        </goals>-->
-                    <!--                        <configuration>-->
-                    <!--                            &lt;!&ndash; specify the swagger yaml &ndash;&gt;-->
-                    <!--                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>-->
-                    <!--                            <cleanupOutput>true</cleanupOutput>-->
-
-                    <!--                            &lt;!&ndash; target to generate kotlin client code &ndash;&gt;-->
-                    <!--&lt;!&ndash;                            <generatorName>kotlin</generatorName>&ndash;&gt;-->
-                    <!--                            <generatorName>kotlin-spring</generatorName>-->
-
-                    <!--                            &lt;!&ndash; hint: if you want to generate kotlin server code, e.g. based on Spring Boot,-->
-                    <!--                                 you can use the following generator: <generatorName>kotlin-spring</generatorName> &ndash;&gt;-->
-
-                    <!--                            &lt;!&ndash; pass any necessary config options &ndash;&gt;-->
-                    <!--                            <configOptions>-->
-                    <!--                                <serializableModel>true</serializableModel>-->
-                    <!--                            </configOptions>-->
-                    <!--                            <generateModelTests>false</generateModelTests>-->
-                    <!--                            <generateApiTests>false</generateApiTests>-->
-                    <!--                            <apiPackage>${project.groupId}.${project.artifactId}.generated.api</apiPackage>-->
-                    <!--                            <modelPackage>${project.groupId}.${project.artifactId}.generated.dto</modelPackage>-->
-                    <!--                        </configuration>-->
-                    <!--                    </execution>-->
                     <execution>
                         <id>kotlin</id>
                         <phase>generate-sources</phase>
@@ -524,8 +423,6 @@
                             <inputSpec>${project.basedir}/src/main/resources/openapi.yaml
 
                             </inputSpec>
-
-                            <!--                                <generatorName>kotlin</generatorName>&ndash;&gt;-->
                             <generatorName>kotlin-spring</generatorName>
                             <configOptions>
                                 <serializableModel>true</serializableModel>
@@ -543,9 +440,6 @@
                                 <delegatePattern>true</delegatePattern>
 
                             </configOptions>
-
-
-                            <!--                            <output>${project.build.directory}/generated-sources/kotlin</output>-->
                             <output>${project.basedir}/src/main/kotlin/com/andersen/manageclients/generated</output>
                             <apiPackage>org.openapitools.client.api</apiPackage>
                             <modelPackage>org.openapitools.client.model</modelPackage>

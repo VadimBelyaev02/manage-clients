@@ -6,6 +6,7 @@ import com.andersen.manageclients.model.AuthorizationRequestDto
 import com.andersen.manageclients.model.AuthorizationResponseDto
 import com.andersen.manageclients.repository.ClientRepository
 import com.andersen.manageclients.service.AuthorizationService
+import jakarta.persistence.EntityNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -16,9 +17,11 @@ class AuthorizationServiceImpl(
     private val tokenProvider: JwtTokenProvider
 ) : AuthorizationService {
     override fun login(authorizationRequestDto: AuthorizationRequestDto): AuthorizationResponseDto {
-        val client = clientRepository.findByEmail(authorizationRequestDto.email) // client can be null
+        val client = clientRepository.findByEmail(authorizationRequestDto.email).orElseThrow{
+            EntityNotFoundException("Client with email = ${authorizationRequestDto.email} not found")
+        }
 
-        if (!passwordEncoder.matches(authorizationRequestDto.password, client?.password)) {
+        if (!passwordEncoder.matches(authorizationRequestDto.password, client.password)) {
             throw AuthorizationException("Invalid password")
         }
 
