@@ -10,7 +10,9 @@ servers:
 tags:
   - name: Registration
   - name: Authorization
-  - name: Clients
+  - name: Client
+  - name: Job
+  - name: Position
 
 paths:
    /clients:
@@ -19,23 +21,32 @@ paths:
       description: 'Get a list of all clients stored in the system'
       operationId: getAllClients
       tags:
-        - Clients
+        - Client
+      parameters:
+        - in: query
+          name: pageRequest
+          schema:
+            $ref: '#/components/schemas/PageableRequest'
+          required: true
+        - in: query
+          name: searchCriteria
+          schema:
+            $ref: '#/components/schemas/SearchCriteria'
+          required: true
       responses:
         '200':
           description: 'All clients are returned'
           content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ClientResponseDto'
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ClientPageResponseDto'
 
     post:
       summary: 'Create a new client'
       description: 'Create a new client using ClientRequestDto'
       operationId: saveClient
       tags:
-        - Clients
+        - Client
       requestBody:
         content:
           application/json:
@@ -57,7 +68,7 @@ paths:
       description: 'Get a client by its id'
       operationId: getClient
       tags:
-        - Clients
+        - Client
       parameters:
         - in: path
           name: clientId
@@ -78,7 +89,7 @@ paths:
       description: 'Update an existing client by its id using ClientRequestDto'
       operationId: updateClient
       tags:
-        - Clients
+        - Client
       parameters:
         - in: path
           name: clientId
@@ -105,7 +116,7 @@ paths:
       description: 'Delete an existing client by its id'
       operationId: deleteClient
       tags:
-        - Clients
+        - Client
       parameters:
         - in: path
           name: clientId
@@ -158,6 +169,235 @@ paths:
              application/json:
                schema:
                  $ref: '#/components/schemas/AuthorizationResponseDto'
+
+   /jobs:
+     get:
+       summary: 'Get all jobs'
+       description: 'Get a list of all jobs stored in the system'
+       operationId: getAllJobs
+       tags:
+         - Job
+       responses:
+         '200':
+           description: 'All jobs are returned'
+           content:
+             application/json:
+               schema:
+                 type: array
+                 items:
+                   $ref: '#/components/schemas/JobResponseDto'
+
+     post:
+       summary: 'Create a new job'
+       description: 'Create a new job using JobRequestDto'
+       operationId: saveJob
+       tags:
+         - Job
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/JobRequestDto'
+         required: true
+       responses:
+         '201':
+           description: 'Position has been created successfully'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/JobResponseDto'
+
+
+   /jobs/{jobId}:
+     get:
+       summary: 'Get a single job'
+       description: 'Get a job by its id'
+       operationId: getJob
+       tags:
+         - Job
+       parameters:
+         - in: path
+           name: jobId
+           schema:
+             $ref: '#/components/schemas/UUID'
+           required: true
+           description: 'Job id'
+       responses:
+         '200':
+           description: 'Job information is returned'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/JobResponseDto'
+
+     put:
+       summary: 'Update a job'
+       description: 'Update an existing job by its id using JobRequestDto'
+       operationId: updateJob
+       tags:
+         - Job
+       parameters:
+         - in: path
+           name: jobId
+           schema:
+             $ref: '#/components/schemas/UUID'
+           required: true
+           description: 'Job id'
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/JobRequestDto'
+         required: true
+       responses:
+         '200':
+           description: 'Job has been updated successfully'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/JobResponseDto'
+
+     delete:
+       summary: 'Delete a job'
+       description: 'Delete an existing job by its id'
+       operationId: deleteJob
+       tags:
+         - Job
+       parameters:
+         - in: path
+           name: jobId
+           schema:
+             $ref: '#/components/schemas/UUID'
+           required: true
+           description: 'Job id'
+       responses:
+         '200':
+           description: 'Job has been deleted successfully'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /positions:
+     get:
+       summary: 'Get all positions'
+       description: 'Get a list of all positions stored in the system'
+       operationId: getAllPositions
+       tags:
+         - Position
+       responses:
+         '200':
+           description: 'All positions are returned'
+           content:
+             application/json:
+               schema:
+                 type: array
+                 items:
+                   $ref: '#/components/schemas/PositionResponseDto'
+
+     post:
+       summary: 'Create a new position'
+       description: 'Create a new position using PositionRequestDto'
+       operationId: savePosition
+       tags:
+         - Position
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/PositionRequestDto'
+         required: true
+       responses:
+         '201':
+           description: 'Job has been created successfully'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/PositionResponseDto'
+
+
+   /positions/{positionId}:
+     get:
+       summary: 'Get a single position'
+       description: 'Get a position by its id'
+       operationId: getPosition
+       tags:
+         - Position
+       parameters:
+         - in: path
+           name: positionId
+           schema:
+             $ref: '#/components/schemas/UUID'
+           required: true
+           description: 'Position id'
+       responses:
+         '200':
+           description: 'Job information is returned'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/PositionResponseDto'
+
+     put:
+       summary: 'Update a position'
+       description: 'Update an existing position by its id using PositionRequestDto'
+       operationId: updatePosition
+       tags:
+         - Position
+       parameters:
+         - in: path
+           name: positionId
+           schema:
+             $ref: '#/components/schemas/UUID'
+           required: true
+           description: 'Position id'
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/PositionRequestDto'
+         required: true
+       responses:
+         '200':
+           description: 'Position has been updated successfully'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/PositionResponseDto'
+
+     delete:
+       summary: 'Delete a position'
+       description: 'Delete an existing position by its id'
+       operationId: deletePosition
+       tags:
+         - Position
+       parameters:
+         - in: path
+           name: positionId
+           schema:
+             $ref: '#/components/schemas/UUID'
+           required: true
+           description: 'Position id'
+       responses:
+         '200':
+           description: 'Position has been deleted successfully'
+
+
 
 security:
   - bearerAuth: [ ]
@@ -239,12 +479,72 @@ components:
           type: string
         gender:
           $ref: '#/components/schemas/Gender'
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionResponseDto'
       required:
         - id
         - lastName
         - firstName
         - email
         - gender
+
+    JobRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+      required:
+        - name
+
+    JobResponseDto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        positions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PositionResponseDto'
+      required:
+        - id
+        - name
+
+
+    PositionRequestDto:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          minLength: 1
+        jobIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/UUID'
+      required:
+        - jobIds
+        - name
+
+    PositionResponseDto:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobResponseDto'
+      required:
+        - id
+        - name
 
     Gender:
       type: string
@@ -267,6 +567,54 @@ components:
       x-pattern-message: 'Invalid email'
       minLength: 7
       maxLength: 50
+
+    PageableRequest:
+      type: object
+      properties:
+        pageNumber:
+          $ref: '#/components/schemas/Page'
+        pageSize:
+          $ref: '#/components/schemas/Size'
+      required:
+        - pageNumber
+        - pageSize
+
+    ClientPageResponseDto:
+      properties:
+        pageNumber:
+           $ref: '#/components/schemas/Page'
+        elementsPerPage:
+           type: integer
+        totalPages:
+           type: integer
+        totalElements:
+           type: integer
+        content:
+           type: array
+           items:
+             $ref: '#/components/schemas/ClientResponseDto'
+
+
+    Page:
+      type: integer
+      description: 'Page number'
+      minLength: 1
+      example: 1
+
+    Size:
+      type: integer
+      description: 'The number of elements per page'
+      minLength: 10
+      maxLength: 50
+      example: 10
+
+    SearchCriteria:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
 
     ApplicationExceptionResponseDto:
       type: object

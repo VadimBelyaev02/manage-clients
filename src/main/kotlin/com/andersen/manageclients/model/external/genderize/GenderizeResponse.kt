@@ -1,7 +1,6 @@
 package com.andersen.manageclients.model.external.genderize
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.ObjectMapper
 
 data class GenderizeResponse(
     @JsonProperty("count") val count: Int,

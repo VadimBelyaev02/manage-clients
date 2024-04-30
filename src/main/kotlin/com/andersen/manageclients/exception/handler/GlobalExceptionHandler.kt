@@ -3,6 +3,7 @@ package com.andersen.manageclients.exception.handler;
 import com.andersen.manageclients.exception.AccessDeniedException
 import com.andersen.manageclients.exception.AuthorizationException
 import com.andersen.manageclients.exception.EntityDuplicationException
+import com.andersen.manageclients.exception.GenderProbabilityException
 import com.andersen.manageclients.model.ApplicationExceptionResponseDto
 import jakarta.persistence.EntityNotFoundException
 import jakarta.servlet.http.HttpServletResponse
@@ -66,6 +67,17 @@ class GlobalExceptionHandler {
         response.status = HttpServletResponse.SC_CONFLICT
         return ApplicationExceptionResponseDto(
             statusCode = HttpStatus.CONFLICT.value(),
+            message = "Duplicate unique field",
+            exceptionMessage = e.message ?: "",
+            timestamp = OffsetDateTime.now()
+        )
+    }
+
+    @ExceptionHandler(GenderProbabilityException::class)
+    fun handleApiExceptions(e: GenderProbabilityException, response: HttpServletResponse): ApplicationExceptionResponseDto {
+        response.status = HttpServletResponse.SC_BAD_REQUEST
+        return ApplicationExceptionResponseDto(
+            statusCode = HttpStatus.BAD_REQUEST.value(),
             message = "Duplicate unique field",
             exceptionMessage = e.message ?: "",
             timestamp = OffsetDateTime.now()

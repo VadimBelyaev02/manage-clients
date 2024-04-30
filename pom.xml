@@ -44,6 +44,27 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-jpamodelgen -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.hibernate</groupId>-->
+        <!--            <artifactId>hibernate-jpamodelgen</artifactId>-->
+        <!--            <version>6.5.0.Final</version>-->
+        <!--            <type>pom</type>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin.kapt/org.jetbrains.kotlin.kapt.gradle.plugin -->
+        <!--        <dependency>-->
+        <!--            <groupId>org.jetbrains.kotlin.kapt</groupId>-->
+        <!--            <artifactId>org.jetbrains.kotlin.kapt.gradle.plugin</artifactId>-->
+        <!--            <version>2.0.0-RC1</version>-->
+        <!--            <type>pom</type>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -273,31 +294,118 @@
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
         <plugins>
+
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <configuration>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                        <plugin>jpa</plugin>
+
+                    </compilerPlugins>
+
+                </configuration>
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <!--                    <execution>-->
+                    <!--                        <id>java-test-compile</id>-->
+                    <!--                        <phase>test-compile</phase>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>testCompile</goal>-->
+                    <!--                        </goals>-->
+                    <!--                    </execution>-->
+                    <execution>
+                        <id>kapt</id>
+                        <goals>
+                            <goal>kapt</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                            <annotationProcessorPaths>
+                                <annotationProcessorPath>
+                                    <groupId>org.mapstruct</groupId>
+                                    <artifactId>mapstruct-processor</artifactId>
+                                    <version>${mapstruct.version}</version>
+                                </annotationProcessorPath>
+                            </annotationProcessorPaths>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-noarg</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+
+                </dependencies>
+
+            </plugin>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
                 <configuration>
-<!--                    <source>17</source>-->
-<!--                    <target>17</target>-->
-<!--                    <annotationProcessorPaths>-->
-<!--                        <path>-->
-<!--                            <groupId>org.mapstruct</groupId>-->
-<!--                            <artifactId>mapstruct-processor</artifactId>-->
-<!--                            <version>${mapstruct.version}</version>-->
-<!--                        </path>-->
-<!--                        <path>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok</artifactId>-->
-<!--                            <version>${lombok.version}</version>-->
-<!--                        </path>-->
-<!--                        <path>-->
-<!--                            <groupId>org.projectlombok</groupId>-->
-<!--                            <artifactId>lombok-mapstruct-binding</artifactId>-->
-<!--                            <version>0.2.0</version>-->
-<!--                        </path>-->
-<!--                    </annotationProcessorPaths>-->
-
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
                         <arg>
@@ -314,6 +422,32 @@
                         </arg>
                     </compilerArgs>
                 </configuration>
+                <executions>
+                    <!-- Replacing default-compile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-compile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <!-- Replacing default-testCompile as it is treated specially by maven -->
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                    <execution>
+                        <id>java-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>java-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
 
@@ -329,52 +463,14 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <version>${kotlin.version}</version>
-                <configuration>
-                    <args>
-                        <arg>-Xjsr305=strict</arg>
-                    </args>
-                    <compilerPlugins>
-                        <plugin>spring</plugin>
-                        <plugin>jpa</plugin>
-                    </compilerPlugins>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-maven-allopen</artifactId>
-                        <version>${kotlin.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-maven-noarg</artifactId>
-                        <version>${kotlin.version}</version>
-                    </dependency>
-                </dependencies>
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>kapt</id>-->
-<!--                        <goals>-->
-<!--                            <goal>kapt</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <sourceDirs>-->
-<!--                                <sourceDir>src/main/kotlin</sourceDir>-->
-<!--                            </sourceDirs>-->
-<!--                            <annotationProcessorPaths>-->
-<!--                                <annotationProcessorPath>-->
-<!--                                    <groupId>org.mapstruct</groupId>-->
-<!--                                    <artifactId>mapstruct-processor</artifactId>-->
-<!--                                    <version>${mapstruct.version}</version>-->
-<!--                                </annotationProcessorPath>-->
-<!--                            </annotationProcessorPaths>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-            </plugin>
+
+
+
+
+
+
+
+
 
 
 
@@ -390,33 +486,33 @@
                 <version>${openapi-generator.version}</version>
 
                 <executions>
-<!--                    <execution>-->
-<!--                        <id>default</id>-->
-<!--                        <goals>-->
-<!--                            <goal>generate</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            &lt;!&ndash; specify the swagger yaml &ndash;&gt;-->
-<!--                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>-->
-<!--                            <cleanupOutput>true</cleanupOutput>-->
+                    <!--                    <execution>-->
+                    <!--                        <id>default</id>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>generate</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            &lt;!&ndash; specify the swagger yaml &ndash;&gt;-->
+                    <!--                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>-->
+                    <!--                            <cleanupOutput>true</cleanupOutput>-->
 
-<!--                            &lt;!&ndash; target to generate kotlin client code &ndash;&gt;-->
-<!--&lt;!&ndash;                            <generatorName>kotlin</generatorName>&ndash;&gt;-->
-<!--                            <generatorName>kotlin-spring</generatorName>-->
+                    <!--                            &lt;!&ndash; target to generate kotlin client code &ndash;&gt;-->
+                    <!--&lt;!&ndash;                            <generatorName>kotlin</generatorName>&ndash;&gt;-->
+                    <!--                            <generatorName>kotlin-spring</generatorName>-->
 
-<!--                            &lt;!&ndash; hint: if you want to generate kotlin server code, e.g. based on Spring Boot,-->
-<!--                                 you can use the following generator: <generatorName>kotlin-spring</generatorName> &ndash;&gt;-->
+                    <!--                            &lt;!&ndash; hint: if you want to generate kotlin server code, e.g. based on Spring Boot,-->
+                    <!--                                 you can use the following generator: <generatorName>kotlin-spring</generatorName> &ndash;&gt;-->
 
-<!--                            &lt;!&ndash; pass any necessary config options &ndash;&gt;-->
-<!--                            <configOptions>-->
-<!--                                <serializableModel>true</serializableModel>-->
-<!--                            </configOptions>-->
-<!--                            <generateModelTests>false</generateModelTests>-->
-<!--                            <generateApiTests>false</generateApiTests>-->
-<!--                            <apiPackage>${project.groupId}.${project.artifactId}.generated.api</apiPackage>-->
-<!--                            <modelPackage>${project.groupId}.${project.artifactId}.generated.dto</modelPackage>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
+                    <!--                            &lt;!&ndash; pass any necessary config options &ndash;&gt;-->
+                    <!--                            <configOptions>-->
+                    <!--                                <serializableModel>true</serializableModel>-->
+                    <!--                            </configOptions>-->
+                    <!--                            <generateModelTests>false</generateModelTests>-->
+                    <!--                            <generateApiTests>false</generateApiTests>-->
+                    <!--                            <apiPackage>${project.groupId}.${project.artifactId}.generated.api</apiPackage>-->
+                    <!--                            <modelPackage>${project.groupId}.${project.artifactId}.generated.dto</modelPackage>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
                     <execution>
                         <id>kotlin</id>
                         <phase>generate-sources</phase>
@@ -425,11 +521,11 @@
                         </goals>
                         <configuration>
 
-                            <inputSpec>                 ${project.basedir}/src/main/resources/openapi.yaml
+                            <inputSpec>${project.basedir}/src/main/resources/openapi.yaml
 
                             </inputSpec>
 
-<!--                                <generatorName>kotlin</generatorName>&ndash;&gt;-->
+                            <!--                                <generatorName>kotlin</generatorName>&ndash;&gt;-->
                             <generatorName>kotlin-spring</generatorName>
                             <configOptions>
                                 <serializableModel>true</serializableModel>
@@ -442,20 +538,14 @@
                                 <library>spring-boot</library>
                                 <oas3>true</oas3>
                                 <useSpringController>true</useSpringController>
-                                <!-- javax.* to jakarta.* -->
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <useSpringfox>false</useSpringfox>
-                                <!--                                <basePackage>nl.bjornvanderlaan.petstoreapi</basePackage>-->
-<!--                                <apiPackage>nl.bjornvanderlaan.petstoreapi.api</apiPackage>-->
-<!--                                <modelPackage>nl.bjornvanderlaan.petstoreapi.model</modelPackage>-->
-<!--                                <configPackage>nl.bjornvanderlaan.petstoreapi.config</configPackage>-->
                                 <delegatePattern>true</delegatePattern>
 
                             </configOptions>
 
 
-
-<!--                            <output>${project.build.directory}/generated-sources/kotlin</output>-->
+                            <!--                            <output>${project.build.directory}/generated-sources/kotlin</output>-->
                             <output>${project.basedir}/src/main/kotlin/com/andersen/manageclients/generated</output>
                             <apiPackage>org.openapitools.client.api</apiPackage>
                             <modelPackage>org.openapitools.client.model</modelPackage>
@@ -464,67 +554,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--            <plugin>-->
-<!--                <groupId>org.openapitools</groupId>-->
-<!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
-<!--                <version>${openapi-generator.version}</version>-->
-
-<!--                <configuration>-->
-<!--                    <generatorName>spring</generatorName>-->
-<!--                    <output>${project.basedir}/src/main/kotlin/com/andersen/manageclients/generated</output>-->
-<!--                    <generateModelTests>false</generateModelTests>-->
-<!--                    <generateApiTests>false</generateApiTests>-->
-
-<!--                    <apiPackage>api</apiPackage>-->
-<!--                    <modelPackage>dto</modelPackage>-->
-<!--                    <supportingFilesToGenerate>ApiUtil.java,HomeController.java,SpringDocConfiguration.java-->
-<!--                    </supportingFilesToGenerate>-->
-
-<!--                    <configOptions>-->
-<!--                        <library>spring-boot</library>-->
-<!--                        <java8>true</java8>-->
-<!--                        <delegatePattern>true</delegatePattern>-->
-<!--                        <hideGenerationTimestamp>true</hideGenerationTimestamp>-->
-<!--                        <useSpringBoot3>true</useSpringBoot3>-->
-<!--                        <configPackage>config</configPackage>-->
-<!--                        <useTags>false</useTags>-->
-<!--                    </configOptions>-->
-<!--                </configuration>-->
-
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>generate-default-with-template</id>-->
-<!--                        <phase>generate-sources</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>generate</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <inputSpec>src/main/resources/openapi.yaml</inputSpec>-->
-<!--                            <templateDirectory>src/main/resources/templates</templateDirectory>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-
 
 
         </plugins>
