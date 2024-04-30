@@ -10,6 +10,7 @@ import com.andersen.manageclients.service.GenderizeService
 import com.andersen.manageclients.service.RegistrationService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class RegistrationServiceImpl(
@@ -20,6 +21,7 @@ class RegistrationServiceImpl(
 ) : RegistrationService {
 
 
+    @Transactional
     override fun register(registrationRequestDto: RegistrationRequestDto): ClientResponseDto {
         if (clientRepository.existsByEmail(registrationRequestDto.email)) {
             throw EntityDuplicationException("Client with email ${registrationRequestDto.email} already exists")

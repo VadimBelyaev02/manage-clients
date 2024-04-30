@@ -1,8 +1,11 @@
 package com.andersen.manageclients.mapper
 
 import com.andersen.manageclients.model.Job
+import com.andersen.manageclients.model.JobPosition
+import com.andersen.manageclients.model.JobPositionId
 import com.andersen.manageclients.model.JobRequestDto
 import com.andersen.manageclients.model.JobResponseDto
+import com.andersen.manageclients.model.PositionResponseDto
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 import org.mapstruct.MappingConstants
@@ -14,14 +17,14 @@ interface JobMapper {
     @Mapping(target = "id", ignore = true)
     fun toEntity(jobRequestDto: JobRequestDto): Job
 
-    //    @Mapping(
-//        target = "positions",
-//        expression = "kotlin(jobPositions.map{positionsMapper.toResponseDto(it)})"
-//    )
-    @Mapping(target = "positions", source = "jobPositions") // Добавляем маппинг для списка jobPositions
 
+    @Mapping(target = "id", source = "id")
     fun toResponseDto(job: Job): JobResponseDto
 
     @Mapping(target = "id", ignore = true)
     fun updateEntityFromRequestDto(jobRequestDto: JobRequestDto, @MappingTarget job: Job)
+
+
+//    fun mapPositionsToResponseDto(jobPositions: List<JobPosition>): List<PositionResponseDto>
+
 }

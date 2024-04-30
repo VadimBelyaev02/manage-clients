@@ -1,4 +1,4 @@
-package com.andersen.manageclients.repository.specification
+package com.andersen.manageclients.specification
 
 import com.andersen.manageclients.model.Client
 import org.springframework.data.jpa.domain.Specification
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ClientSpecification {
-    fun firstNameAndEmailAndLastNameLike(firstName: String?, lastName: String?): Specification<Client> {
+    fun firstNameAndLastNameLike(firstName: String?, lastName: String?): Specification<Client> {
         val firstNameSpecification = firstNameLike(firstName)
         val lastNameSpecification = lastNameLike(lastName)
 

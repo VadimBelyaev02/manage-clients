@@ -20,6 +20,6 @@ data class Job(
     var name: String,
 
     @OneToMany(mappedBy = "job", fetch = FetchType.EAGER)
-    var jobPositions: List<JobPosition> = listOf()
+    var jobPositions: List<JobPosition>? = mutableListOf()
 ) {
 }

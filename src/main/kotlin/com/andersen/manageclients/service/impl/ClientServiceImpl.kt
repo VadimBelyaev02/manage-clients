@@ -8,7 +8,7 @@ import com.andersen.manageclients.model.ClientResponseDto
 import com.andersen.manageclients.model.PageableRequest
 import com.andersen.manageclients.model.SearchCriteria
 import com.andersen.manageclients.repository.ClientRepository
-import com.andersen.manageclients.repository.specification.ClientSpecification
+import com.andersen.manageclients.specification.ClientSpecification
 import com.andersen.manageclients.service.ClientService
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.data.domain.PageRequest
@@ -34,7 +34,7 @@ class ClientServiceImpl(
         val pageable = PageRequest.of(pageableRequest.pageNumber, pageableRequest.pageSize)
 
         val page = clientRepository.findAll(
-            clientSpecification.firstNameAndEmailAndLastNameLike(
+            clientSpecification.firstNameAndLastNameLike(
                 searchCriteria.firstName,
                 searchCriteria.lastName
             ),
@@ -63,6 +63,7 @@ class ClientServiceImpl(
         return clientMapper.toResponseDto(client)
     }
 
+    @Transactional
     override fun deleteById(id: UUID) {
         if (!clientRepository.existsById(id)) {
             throw EntityNotFoundException("Client with id $id not found")

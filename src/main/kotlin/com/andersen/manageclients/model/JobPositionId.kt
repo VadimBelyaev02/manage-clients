@@ -9,13 +9,9 @@ import java.util.UUID
 data class JobPositionId (
 
     @Column(name = "job_id")
-    var jobId: UUID, // = UUID.randomUUID(),
+    var jobId: UUID,
 
     @Column(name = "position_id")
-    var positionsId: UUID// = UUID.randomUUID()
+    var positionsId: UUID
 ) : Serializable
 
-// Composite key class must implement Serializable and have defaults.
-// class PropertyId(
-//    val uuid: UUID = UUID.randomUUID(),
-//    val name: String = "") : Serializable

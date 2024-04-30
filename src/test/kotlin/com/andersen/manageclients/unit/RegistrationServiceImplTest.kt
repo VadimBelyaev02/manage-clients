@@ -18,7 +18,7 @@ import com.andersen.manageclients.model.RegistrationRequestDto
 import com.andersen.manageclients.model.SearchCriteria
 import com.andersen.manageclients.model.external.genderize.GenderizeResponse
 import com.andersen.manageclients.repository.ClientRepository
-import com.andersen.manageclients.repository.specification.ClientSpecification
+import com.andersen.manageclients.specification.ClientSpecification
 import com.andersen.manageclients.service.GenderizeService
 import com.andersen.manageclients.service.impl.ClientServiceImpl
 import com.andersen.manageclients.service.impl.RegistrationServiceImpl

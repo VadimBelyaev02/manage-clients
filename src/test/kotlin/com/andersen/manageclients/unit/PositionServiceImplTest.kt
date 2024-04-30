@@ -76,10 +76,6 @@ class PositionServiceImplTest : BaseUnitTest() {
             name = JOB_NAME
         )
 
-        val jobResponseDto = JobResponseDto(
-            id = ID.toString(),
-            name = JOB_NAME
-        )
 
         val jobPosition = JobPosition(
             job = job,
@@ -97,14 +93,14 @@ class PositionServiceImplTest : BaseUnitTest() {
         positionResponseDto = PositionResponseDto(
             id = positionId.toString(),
             name = POSITION_NAME,
-            jobs = listOf(jobResponseDto)
+            jobsIds = listOf(ID.toString())
         )
     }
 
 
     @Nested
     @DisplayName("Position get unit tests")
-    inner class GetJobTests {
+    inner class GetPositionTests {
 
         @Test
         fun `getById should return client when job is found`() {
@@ -127,7 +123,7 @@ class PositionServiceImplTest : BaseUnitTest() {
         }
 
         @Test
-        fun `getAll should return list of jobs when jobs exist`() {
+        fun `getAll should return list of positions when positions exist`() {
             val positions = listOf(position, position, position)
             val expectedResult = listOf(positionResponseDto, positionResponseDto, positionResponseDto)
 
@@ -136,7 +132,7 @@ class PositionServiceImplTest : BaseUnitTest() {
 
             assertEquals(expectedResult, positionService.getAll())
 
-            verify(jobRepository, only()).findAll()
+            verify(positionRepository, only()).findAll()
             verify(positionMapper, times(expectedResult.size)).toResponseDto(position)
         }
 

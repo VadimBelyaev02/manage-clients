@@ -6,7 +6,7 @@ import java.util.UUID
 class Constants {
     companion object {
         val GENDER = Gender.male
-        val ID = UUID.fromString("c7b7c414-99be-11ee-b9d1-0242ac120002")
+        val ID: UUID = UUID.fromString("c7b7c414-99be-11ee-b9d1-0242ac120002")
         const val EMAIL = "v.beliayeu@andersen.com"
         const val PASSWORD = "password"
         const val TOKEN = "token"

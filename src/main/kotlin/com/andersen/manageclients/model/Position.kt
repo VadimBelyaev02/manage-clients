@@ -21,6 +21,6 @@ data class Position(
 
 
     @OneToMany(mappedBy = "position")
-    var positionJobs: List<JobPosition>
+    var positionJobs: List<JobPosition>? = mutableListOf()
 ) {
 }

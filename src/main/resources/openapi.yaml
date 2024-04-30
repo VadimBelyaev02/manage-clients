@@ -41,27 +41,6 @@ paths:
                schema:
                  $ref: '#/components/schemas/ClientPageResponseDto'
 
-#    post:
-#      summary: 'Create a new client'
-#      description: 'Create a new client using ClientRequestDto'
-#      operationId: saveClient
-#      tags:
-#        - Client
-#      requestBody:
-#        content:
-#          application/json:
-#            schema:
-#              $ref: '#/components/schemas/ClientRequestDto'
-#        required: true
-#      responses:
-#        '201':
-#          description: 'Client has been created successfully'
-#          content:
-#            application/json:
-#              schema:
-#                $ref: '#/components/schemas/ClientResponseDto'
-
-
    /clients/{clientId}:
     get:
       summary: 'Get a single client'
@@ -497,6 +476,7 @@ components:
           type: string
           maxLength: 50
           minLength: 1
+          example: "Andersen"
       required:
         - name
 
@@ -507,10 +487,11 @@ components:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        positions:
+          example: "Andersen"
+        positionsIds:
           type: array
           items:
-            $ref: '#/components/schemas/PositionResponseDto'
+            $ref: '#/components/schemas/UUID'
       required:
         - id
         - name
@@ -523,6 +504,7 @@ components:
           type: string
           maxLength: 50
           minLength: 1
+          example: "Developer"
         jobIds:
           type: array
           items:
@@ -538,16 +520,16 @@ components:
           $ref: '#/components/schemas/UUID'
         name:
           type: string
-        jobs:
+          example: "Developer"
+        jobsIds:
           type: array
           items:
-            $ref: '#/components/schemas/JobResponseDto'
+            $ref: '#/components/schemas/UUID'
       required:
         - id
         - name
 
     Gender:
-      type: string
       description: "Biological gender: 'Male' or 'Female' without quotes"
       enum:
         - Male

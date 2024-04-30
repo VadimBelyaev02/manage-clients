@@ -7,7 +7,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 
-//@IdClass(ClientPositionId::class)
 @Entity
 @Table(name = "clients_positions")
 data class ClientPosition(
@@ -22,11 +21,4 @@ data class ClientPosition(
     @ManyToOne
     @JoinColumn(name = "position_id", insertable = false, updatable = false)
     var position: Position
-/*
-@Id
-    var clientId: UUID
-
-    @Id
-    var positionId: UUID
- */
 ) {}

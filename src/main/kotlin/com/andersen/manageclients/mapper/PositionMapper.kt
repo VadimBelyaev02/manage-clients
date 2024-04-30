@@ -17,15 +17,9 @@ interface PositionMapper {
 
     fun toEntity(positionRequestDto: PositionRequestDto) : Position
 
-    @Mapping(target = "jobs", expression = "java(mapJobsToResponseDto(position.getPositionJobs()))")
+    @Mapping(target = "jobsIds", expression = "java(position.getPositionJobs().stream()" +
+            ".map(positionJob -> positionJob.getJob().getId().toString()).toList())")
     fun toResponseDto(position: Position) : PositionResponseDto
 
     fun updateEntityFromRequestDto(positionRequestDto: PositionRequestDto, @MappingTarget position: Position)
-
-    fun map(jobPositionId: JobPositionId): String
-
-    fun mapJobsToResponseDto(jobPositions: List<JobPosition>): List<JobResponseDto>
-
-
-
 }

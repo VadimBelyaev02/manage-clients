@@ -28,5 +28,5 @@ data class Client(
         var gender: String,
 
         @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-        var clientPositions: List<ClientPosition>? = listOf()
+        var clientPositions: List<ClientPosition>? = mutableListOf()
 )

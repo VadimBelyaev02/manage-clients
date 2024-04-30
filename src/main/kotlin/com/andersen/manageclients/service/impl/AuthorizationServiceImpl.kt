@@ -16,6 +16,7 @@ class AuthorizationServiceImpl(
     private val clientRepository: ClientRepository,
     private val tokenProvider: JwtTokenProvider
 ) : AuthorizationService {
+
     override fun login(authorizationRequestDto: AuthorizationRequestDto): AuthorizationResponseDto {
         val client = clientRepository.findByEmail(authorizationRequestDto.email).orElseThrow{
             EntityNotFoundException("Client with email = ${authorizationRequestDto.email} not found")

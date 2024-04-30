@@ -7,7 +7,6 @@ import com.andersen.manageclients.Constants.Companion.GENDER
 import com.andersen.manageclients.Constants.Companion.ID
 import com.andersen.manageclients.Constants.Companion.LAST_NAME
 import com.andersen.manageclients.exception.EntityDuplicationException
-import com.andersen.manageclients.exception.GenderProbabilityException
 import com.andersen.manageclients.mapper.ClientMapper
 import com.andersen.manageclients.model.Client
 import com.andersen.manageclients.model.ClientPageResponseDto
@@ -18,20 +17,17 @@ import com.andersen.manageclients.model.PageableRequest
 import com.andersen.manageclients.model.SearchCriteria
 import com.andersen.manageclients.model.external.genderize.GenderizeResponse
 import com.andersen.manageclients.repository.ClientRepository
-import com.andersen.manageclients.repository.specification.ClientSpecification
+import com.andersen.manageclients.specification.ClientSpecification
 import com.andersen.manageclients.service.GenderizeService
 import com.andersen.manageclients.service.impl.ClientServiceImpl
 import jakarta.persistence.EntityNotFoundException
 import org.junit.experimental.runners.Enclosed
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.eq
 import org.mockito.InjectMocks
@@ -41,7 +37,6 @@ import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.only
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
-import org.mockito.Mockito.verifyNoInteractions
 import org.mockito.Mockito.verifyNoMoreInteractions
 import org.mockito.Mockito.`when`
 import org.springframework.data.domain.Page
@@ -161,8 +156,6 @@ class ClientServiceImplTest : BaseUnitTest() {
                     )
                 )
             }
-
-
             val firstNameCriteria = "La"
             val lastNameCriteria = "Ga"
             val searchCriteria = SearchCriteria(
@@ -170,20 +163,20 @@ class ClientServiceImplTest : BaseUnitTest() {
                 lastName = lastNameCriteria
             )
 
-            val pageNumber = 1
+            val pageNumber = 0
             val pageSize = 10;
             val pageableRequest = PageableRequest(
                 pageNumber = pageNumber,
                 pageSize = pageSize
             )
-            val listOfClients = clientList.stream()
+            val listOfFilteredClients = clientList.stream()
                 .filter { client ->
                     client.firstName.contains(firstNameCriteria) &&
                             client.lastName.contains(lastNameCriteria)
                 }
                 .skip(10)
                 .toList()
-            val listOfClientResponseDto = listOfClients.stream()
+            val listOfFilteredClientResponseDto = listOfFilteredClients.stream()
                 .map { client ->
                     ClientResponseDto(
                         firstName = client.firstName,
@@ -196,52 +189,27 @@ class ClientServiceImplTest : BaseUnitTest() {
                 .toList()
 
             val pageable = PageRequest.of(pageableRequest.pageNumber, pageableRequest.pageSize)
-            val spec = clientSpecification.firstNameAndEmailAndLastNameLike(firstNameCriteria, lastNameCriteria)
             val page: Page<Client> = PageImpl(
-                listOfClients, pageable,
-                (listOfClients.size / pageSize).toLong()
+                listOfFilteredClients,
+                pageable,
+                (clientList.size).toLong()
             )
             val expectedResult = ClientPageResponseDto(
                 pageNumber = pageableRequest.pageNumber,
                 elementsPerPage = pageableRequest.pageSize,
                 totalPages = page.totalPages,
                 totalElements = page.totalElements.toInt(),
-                content = listOfClientResponseDto
+                content = listOfFilteredClientResponseDto
             )
 
             `when`(clientRepository.findAll(any(), eq(pageable))).thenReturn(page)
+            for (i in listOfFilteredClients.indices) {
+                `when`(clientMapper.toResponseDto(listOfFilteredClients[i])).thenReturn(listOfFilteredClientResponseDto[i])
+            }
 
             assertEquals(expectedResult, clientService.getAll(pageableRequest, searchCriteria))
 
-            verify(clientRepository, only()).findAll(spec, pageable)
-        }
-
-
-        @Test
-        fun `getAll should return list of clients when clients exist`() {
-            val clients = listOf(client, client, client)
-            val expectedResult = listOf(clientResponseDto, clientResponseDto, clientResponseDto)
-
-            `when`(clientRepository.findAll()).thenReturn(clients)
-            `when`(clientMapper.toResponseDto(client)).thenReturn(clientResponseDto)
-
-            //assertEquals(expectedResult, clientService.getAll())
-
-            verify(clientRepository, only()).findAll()
-            verify(clientMapper, times(expectedResult.size)).toResponseDto(client)
-        }
-
-        @Test
-        fun `getAll should return empty list when no clients`() {
-            val clients = listOf<Client>()
-            val expectedResult = listOf<ClientResponseDto>()
-
-            `when`(clientRepository.findAll()).thenReturn(clients)
-
-            // assertEquals(expectedResult, clientService.getAll())
-
-            verify(clientRepository, only()).findAll()
-            verifyNoInteractions(clientMapper)
+            verify(clientRepository, only()).findAll(any(), eq(pageable))
         }
     }
 

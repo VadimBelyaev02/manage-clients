@@ -8,6 +8,7 @@ import com.andersen.manageclients.repository.JobRepository
 import com.andersen.manageclients.service.JobService
 import jakarta.persistence.EntityNotFoundException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
@@ -28,6 +29,7 @@ class JobServiceImpl(
         return jobs.map { jobMapper.toResponseDto(it) }
     }
 
+    @Transactional
     override fun save(jobRequestDto: JobRequestDto): JobResponseDto {
         checkUniqueness(jobRequestDto)
 
@@ -36,6 +38,7 @@ class JobServiceImpl(
         return jobMapper.toResponseDto(savedJob)
     }
 
+    @Transactional
     override fun update(id: UUID, jobRequestDto: JobRequestDto): JobResponseDto {
         checkUniqueness(jobRequestDto)
 
@@ -46,6 +49,7 @@ class JobServiceImpl(
         return jobMapper.toResponseDto(job)
     }
 
+    @Transactional
     override fun deleteById(id: UUID) {
         if (!jobRepository.existsById(id)) {
             throw EntityNotFoundException("Job with id = $id not found")
