@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-jobs-positions-table
+      author: Vadzim
+      changes:
+        - createTable:
+            tableName: jobs_positions
+            columns:
+              - column:
+                  name: job_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: position_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+
+        - addForeignKeyConstraint:
+            baseTableName: jobs_positions
+            baseColumnNames:
+              - job_id
+            referencedTableName: jobs
+            referencedColumnNames:
+              - id
+            constraintName: fk_job_id_to_jobs
+
+        - addForeignKeyConstraint:
+            baseTableName: jobs_positions
+            baseColumnNames:
+              - position_id
+            referencedTableName: positions
+            referencedColumnNames:
+              - id
+            constraintName: fk_position_to_positions

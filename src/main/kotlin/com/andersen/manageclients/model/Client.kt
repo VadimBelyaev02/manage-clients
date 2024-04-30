@@ -1,26 +1,32 @@
 package com.andersen.manageclients.model
 
 import jakarta.persistence.*
+import lombok.Data
 import lombok.Setter
 import java.util.*
 
-@Setter
+
 @Entity
 @Table(name = "clients")
 data class Client(
 
         @Id
         @GeneratedValue(strategy = GenerationType.UUID)
-        val id: UUID? = null,
+        var id: UUID? = null,
 
         @Column(name = "first_name")
-        val firstName: String,
+        var firstName: String,
 
         @Column(name = "last_name")
-        val lastName: String,
+        var lastName: String,
 
         @Column(name = "email")
-        val email: String,
+        var email: String,
 
-        val gender: String
+        var password: String? = null,
+
+        var gender: String,
+
+        @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+        var clientPositions: List<ClientPosition>? = listOf()
 )

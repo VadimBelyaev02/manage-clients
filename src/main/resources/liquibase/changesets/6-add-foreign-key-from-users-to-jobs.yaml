@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-job-id-column
+      author: Vadzim
+      changes:
+        - addColumn:
+            tableName: clients
+            columns:
+              - column:
+                  name: job_id
+                  type: uuid
+        - addForeignKeyConstraint:
+            baseTableName: clients
+            baseColumnNames:
+              - job_id
+            referencedTableName: jobs
+            referencedColumnNames:
+              - id
+            constraintName: fk_job_id_to_jobs
